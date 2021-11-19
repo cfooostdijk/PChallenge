@@ -2,25 +2,11 @@ module PokeApi
   module V2
     class Client
 
-      PokeApiError = Class.new(StandardError)
-      BadRequestError = Class.new(PokeApiError)
-      UnauthorizedError = Class.new(PokeApiError)
-      ForbiddenError = Class.new(PokeApiError)
-      ApiRequestsQuotaReachedError = Class.new(PokeApiError)
-      NotFoundError = Class.new(PokeApiError)
-      UnprocessableEntityError = Class.new(PokeApiError)
-      ApiError = Class.new(PokeApiError)
-      
-      HTTP_OK_CODE = 200
-
-      HTTP_BAD_REQUEST_CODE = 400
-      HTTP_UNAUTHORIZED_CODE = 401
-      HTTP_FORBIDDEN_CODE = 403
-      HTTP_NOT_FOUND_CODE = 404
-      HTTP_UNPROCESSABLE_ENTITY_CODE = 422
-      HTTP_TOO_MANY_REQUEST = 429
+      include HttpStatusCodes
+      include ApiExceptions
 
       API_ENDPOINT = 'https://pokeapi.co/api/v2'.freeze
+    
 
       def initialize; end
 
@@ -28,6 +14,13 @@ module PokeApi
         request(
           http_method: :get,
           endpoint: "pokemon"
+        )
+      end
+
+      def pokemon(id)
+        request(
+          http_method: :get,
+          endpoint: "pokemon/#{id}"
         )
       end
 
