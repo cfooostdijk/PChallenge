@@ -7,7 +7,6 @@ module PokeApi
 
       API_ENDPOINT = 'https://pokeapi.co/api/v2'.freeze
     
-
       def initialize; end
 
       def pokemons
@@ -17,10 +16,17 @@ module PokeApi
         )
       end
 
-      def pokemon(id)
+      def pokemon_base(id)
         request(
           http_method: :get,
           endpoint: "pokemon/#{id}"
+        )
+      end
+
+      def pokemon_base2(id)
+        request(
+          http_method: :get,
+          endpoint: "characteristic/#{id}"
         )
       end
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  </head>
+
+  <style>
+    div {
+      margin-left: 25%;
+      margin-top: 10%;
+    }
+  </style>
+  
+  <body>
+
+    <h1 style= "text-align: center; color: Red">Hola Entrenador, tu Pokemon de hoy es:</h1>
+
+    <div>
+      <h2 style= "font-size: 40px; margin-left: 50px; color: Blue"><%= @poke.name %></h2>
+      <img src= <%= @poke.image %> width="250" height="250" style="float:left" >
+      <span style= "margin-left: 5%; font-size: 30px; color: Black">"<%= @poke.description %>"</span>
+      <p style= "margin-top: 50px; margin-left: 30%; color: Green"> 
+        El pokemon es tipo: <%= @poke.ptype %> <br>
+        El pokemon pesa: <%= @poke.weight %> kgs <br>
+        Las habilidades del pokemon son: <%= @poke.ability %> <br>
+        La evolucion del pokemon es: <%= @poke.evolution %>
+    </div>    
+    
+    <div> <%= link_to 'Back', pokemon_path %> </div>
+
+  </body>
+</html>
