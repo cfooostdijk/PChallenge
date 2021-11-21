@@ -7,7 +7,7 @@ class PokemonsController < ApplicationController
   Poks = Struct.new(:abilities, :images, :names, :ptypes, :weights, keyword_init: true)
   Pok = Struct.new(:ability, :description, :evolution, :image, :name, :ptype, :weight, keyword_init: true)    
 
-  #ESTE VA CON "ALL_POKES" V1 E INDEX CON @pokes.name SOLO
+  # ESTE VA CON "ALL_POKES" V1 E INDEX CON @pokes.name SOLO
   # def index
   #   @pokes = Poks.new(
   #     names: all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
@@ -37,6 +37,7 @@ class PokemonsController < ApplicationController
     )
   end
 
+  # INTENTO DE CONDICIONAL PARA DETERMINAR SI TIENE MAS EVOLUCIONES O NO, BASADA EN SI SON DEL MISMO TIPO CON EL SIGUIENTE POKEMON
   # if pokemon_info['types'][0]['type']['name'] == pokemon_info3['types'][0]['type']['name']
 
   private
@@ -45,7 +46,7 @@ class PokemonsController < ApplicationController
     @poke_client ||= PokeApi::V2::Client.new
   end
 
-  # V2
+  # V2 - FALTA ARMAR UN LOOP PARA DETERMINAR EL CAMBIO DE CADA POKEMON E INCORPORARLO 
   def all_pokes
     i = 1
     id2 = (params[:id].to_i + i)
