@@ -5,6 +5,10 @@
 
   <body>
     <h1 style= "color: Red; text-align: center">Hola Entrenador, los Pokemones son:</h1>
-    <h4><%= @pokemons %></h4>
+    <h4><%= @pokes.names %></h4>
+    <h4><%= @pokes.abilities %></h4>
+    <img src= <%= @pokes.images %> width="250" height="250" style="float:left" >
+    <h4><%= @pokes.weights %></h4>
+    <h4><%= @pokes.ptypes %></h4>
   </body>
 </html>
