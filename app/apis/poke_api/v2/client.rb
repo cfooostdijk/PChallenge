@@ -9,6 +9,7 @@ module PokeApi
     
       def initialize; end
 
+      # INDEX
       def pokemons
         request(
           http_method: :get,
@@ -16,6 +17,7 @@ module PokeApi
         )
       end
 
+      # POKEMON_BASE --> BASIC INFO
       def pokemon_base(id)
         request(
           http_method: :get,
@@ -23,17 +25,20 @@ module PokeApi
         )
       end
 
+      # POKEMON_BASE2 --> DESCRIPTION
       def pokemon_base2(id)
         request(
           http_method: :get,
-          endpoint: "pokemon/#{id}"
+          endpoint: "characteristic/#{id}"
         )
+        rescue => ex
       end
 
+      # POKEMON_BASE3 --> EVOLUTION
       def pokemon_base3(id)
         request(
           http_method: :get,
-          endpoint: "characteristic/#{id}"
+          endpoint: "pokemon/#{id}"
         )
         rescue => ex
       end
