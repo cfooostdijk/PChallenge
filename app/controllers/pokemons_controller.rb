@@ -27,21 +27,15 @@ class PokemonsController < ApplicationController
 
   # ESTE VA "ALL_POKES" CON V3
   def index
-    qnt = 0
-    pokemons = []
-
-    response = set_poke_client.pokemons
-    response.each do
-      qnt = qnt + 1
-    end
-
-    @pokesqnt = qnt
-
     @pokes = Poks.new(
       names: all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
     )
-
   end
+
+    # V3
+    def all_pokes
+      @allpokes ||= set_poke_client.pokemons
+    end
 
       # pokemons = []
       # allpokes ||= set_poke_client.pokemons
@@ -78,7 +72,7 @@ class PokemonsController < ApplicationController
         description: 'No hay descripción para este Pokemon' )
     end
 
-    # # POKEMON_BASE3 --> EVOLUTION
+    # POKEMON_BASE3 --> EVOLUTION
     if pokemon_info3.present? && pokemon_info3['types'].map { |p| p['type']['name'].capitalize }.join(", ") == pokemon_info['types'].map { |p| p['type']['name'].capitalize }.join(", ") 
       @poke2 = Pok.new(
         evolution: pokemon_info3['name'].capitalize
@@ -94,11 +88,6 @@ class PokemonsController < ApplicationController
 
   def set_poke_client
     @poke_client ||= PokeApi::V2::Client.new
-  end
-
-  # V3
-  def all_pokes
-    @allpokes ||= set_poke_client.pokemons
   end
 
   # V2 - FALTA ARMAR UN LOOP PARA DETERMINAR EL CAMBIO DE CADA POKEMON E INCORPORARLO 
