@@ -6,51 +6,9 @@ class PokemonsController < ApplicationController
   Pok = Struct.new(:ability, :description, :evolution, :image, :name, :ptype, :weight, keyword_init: true)    
 
   # ESTE VA CON "ALL_POKES" V1 E INDEX CON @pokes.name SOLO
-  # def index
-  #   @pokes = Poks.new(
-  #     names: all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
-  #   )
-  # end
-
-  # ESTE VA CON "ALL_POKES" V2 E INDEX COMPLETO (ME TOMA UN SOLO POKE)
-  # def index
-  #   @pokes = Poks.new(
-  #     abilities: all_pokes['abilities'].map { |p| p['ability']['name'].capitalize }.join(", "),
-  #     images: all_pokes['sprites']['other']['official-artwork']['front_default'],
-  #     names: all_pokes['name'].capitalize,
-  #     ptypes: all_pokes['types'].map { |p| p['type']['name'].capitalize }.join(", "),
-  #     weights: all_pokes['weight']
-  #   )
-  # end
-  
-  ###############################################################
-
-  # ESTE VA "ALL_POKES" CON V3
   def index
-    @pokes = Poks.new(
-      names: all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
-    )
+    @pokes = all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
   end
-
-    # V3
-    def all_pokes
-      @allpokes ||= set_poke_client.pokemons
-    end
-
-      # pokemons = []
-      # allpokes ||= set_poke_client.pokemons
-      # allpokes.each do |k, value|
-      #   if k == "results"
-      #     value.each do 
-      #       # i = 1
-      #       # id2 = (params[:id].to_i + i)
-      #       response = set_poke_client.pokemon_base(params[:id])
-      #       # set_poke_client.pokemon_base(key["https://pokeapi.co/api/v2/pokemon/#{params[:id]}"])
-      #       pokemons.push(response)
-      #     end
-      #   end
-      # end
-  # end
   
   def show
     # POKEMON_BASE --> BASIC INFO
@@ -90,17 +48,10 @@ class PokemonsController < ApplicationController
     @poke_client ||= PokeApi::V2::Client.new
   end
 
-  # V2 - FALTA ARMAR UN LOOP PARA DETERMINAR EL CAMBIO DE CADA POKEMON E INCORPORARLO 
-  # def all_pokes
-  #   i = 1
-  #   id2 = (params[:id].to_i + i)
-  #   @allpokes ||= set_poke_client.pokemon_base(id2)
-  # end
-
   # V1
-  # def all_pokes
-  #   @allpokes ||= set_poke_client.pokemons
-  # end
+  def all_pokes
+    @allpokes ||= set_poke_client.pokemons
+  end
 
   # POKEMON_BASE --> BASIC INFO  
   def pokemon_info
