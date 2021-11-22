@@ -12,7 +12,7 @@ module PokeApi
       def pokemons
         request(
           http_method: :get,
-          endpoint: "pokemon"
+          endpoint: "pokemon?limit=2000"
         )
       end
 
@@ -26,8 +26,16 @@ module PokeApi
       def pokemon_base2(id)
         request(
           http_method: :get,
+          endpoint: "pokemon/#{id}"
+        )
+      end
+
+      def pokemon_base3(id)
+        request(
+          http_method: :get,
           endpoint: "characteristic/#{id}"
         )
+        rescue => ex
       end
 
       private
