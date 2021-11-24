@@ -4,59 +4,40 @@ class PokemonsController < ApplicationController
   before_action :set_poke_client, only: %i[index show]
   before_action :pokemon_info, only: :show
 
-  Poks = Struct.new(:abilities, :images, :names, :ptypes, :weights, keyword_init: true)
-  Pok = Struct.new(:ability, :description, :evolution, :image, :name, :ptype, :weight, keyword_init: true)
+  Poks = Struct.new(:abilities, :images, :names, :ptypes, :urls, :weights, keyword_init: true)
+  Pok = Struct.new(:ability, :description, :evolution, :id, :image, :name, :ptype, :weight, keyword_init: true)
 
-  # ESTE VA CON "ALL_POKES" V1 E INDEX CON @pokes.name SOLO
   def index
-    @pokes = all_pokes['results'].map { |p| p['name'].capitalize }.join('; ')
+    pokes = []
+    all_pokes.each do |k, value|
+      if k == 'results'
+        value.each do |key, val|
+          response = Faraday.get(key["url"])
+          response = Oj.load(response.body)
+          pokes.push(response)
+        end
+      end
+    end
+
+    @pokes = []
+    pokes.each do |poke|
+      @poke = Poks.new(
+        abilities: poke['abilities']&.map { |p| p['ability']['name'].capitalize }.join(", "),
+        images: poke['sprites']['other']['official-artwork']['front_default'],
+        names: poke['forms'][0]['name'].capitalize,
+        ptypes:  poke['types'].map { |p| p['type']['name'].capitalize }.join(", "),
+        urls: poke['id'],
+        weights:  poke['weight']
+      ) 
+      @pokes << @poke
+    end
   end
-
-  ###############################################################
-  # def index
-  #   pokes = all_pokes.each do
-  #     @pokes = all_pokes['results'].map { |p| [p['name'].capitalize, p['url']] }.join(", ")
-  #   end
-  # end
-
-  # def index
-  #   pokes = []
-  #   all_pokes.each do |k, value|
-  #     if k == 'results'
-  #       value.each do |key, val|
-  #         response = Faraday.get(key["url"])
-  #         response = Oj.load(response.body)
-  #         pokes.push(response)
-  #       end
-  #     end
-  #   end
-
-  #   pokes.map do |poke| {
-  #     Poks.new
-  #       names: pokemon_info['forms'][0]['name'].capitalize
-
-  #     }
-  #   end
-
-  # pokes.map do |poke| {
-  # :abilities => :poke['abilities'].map { |p| p['ability']['name'].capitalize }.join(", "),
-  # :images => :poke['sprites']['other']['official-artwork']['front_default'],
-  # :names => :poke['forms'][0]['name'].capitalize,
-  # :ptypes => :poke['types'].map { |p| p['type']['name'].capitalize }.join(", "),
-  # :weights => :poke['weight']
-  #   }
-  # end
-
-  # @pokes = pokes
-
-  # render json: { pokemons:  @pokes }
-
-  # end
 
   def show
     # POKEMON_BASE --> BASIC INFO
     @poke = Pok.new(
       ability: pokemon_info['abilities'].map { |p| p['ability']['name'].capitalize }.join(', '),
+      id: pokemon_info['id'],
       image: pokemon_info['sprites']['other']['official-artwork']['front_default'],
       name: pokemon_info['forms'][0]['name'].capitalize,
       ptype: pokemon_info['types'].map { |p| p['type']['name'].capitalize }.join(', '),

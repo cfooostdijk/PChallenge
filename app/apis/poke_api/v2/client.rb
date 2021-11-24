@@ -14,7 +14,7 @@ module PokeApi
       def pokemons
         request(
           http_method: :get,
-          endpoint: 'pokemon?limit=3'
+          endpoint: 'pokemon'
         )
       end
 

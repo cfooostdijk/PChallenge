@@ -9,12 +9,14 @@
       margin-left: 25%;
       margin-top: 10%;
     }
+    ul#menu li {
+      display: inline;
+      padding-right: 150px;
+    }
   </style>
-  
+
   <body>
-
     <h1 style= "text-align: center; color: Red">Hola Entrenador, tu Pokemon de hoy es:</h1>
-
     <div>
       <h2 style= "font-size: 40px; margin-left: 50px; color: Blue"><%= @poke.name %></h2>
       <img src= <%= @poke.image %> width="250" height="250" style="float:left" >
@@ -24,9 +26,18 @@
         El pokemon pesa: <%= @poke.weight %> kgs <br>
         Las habilidades del pokemon son: <%= @poke.ability %> <br>
         La evolucion del pokemon es: <%= @poke2.evolution %>
-    </div>    
-    
-    <div> <%= link_to 'Back', pokemon_path %> </div>
+      </p>
+    </div>   
 
+    <% next_poke = @poke.id + 1 %>
+    <% previous_poke = @poke.id - 1 %>
+
+    <div>
+      <ul id="menu" >
+        <li><%= link_to 'Pokemon Anterior', "/pokemon/#{previous_poke}" %> </li>
+        <li><%= link_to 'Volver al Index', pokemon_path %> </li>
+        <li><%= link_to 'Pokemon Siguiente', "/pokemon/#{next_poke}" %> </li>
+      </ul>
+    </div>
   </body>
 </html>
