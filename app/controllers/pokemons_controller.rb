@@ -1,45 +1,93 @@
+# frozen_string_literal: true
+
 class PokemonsController < ApplicationController
-  before_action :set_poke_client, only: %i[ index show ]
+  before_action :set_poke_client, only: %i[index show]
   before_action :pokemon_info, only: :show
 
   Poks = Struct.new(:abilities, :images, :names, :ptypes, :weights, keyword_init: true)
-  Pok = Struct.new(:ability, :description, :evolution, :image, :name, :ptype, :weight, keyword_init: true)    
+  Pok = Struct.new(:ability, :description, :evolution, :image, :name, :ptype, :weight, keyword_init: true)
 
   # ESTE VA CON "ALL_POKES" V1 E INDEX CON @pokes.name SOLO
   def index
-    @pokes = all_pokes['results'].map { |p| p['name'].capitalize }.join(" ")
+    @pokes = all_pokes['results'].map { |p| p['name'].capitalize }.join('; ')
   end
-  
+
+  ###############################################################
+  # def index
+  #   pokes = all_pokes.each do
+  #     @pokes = all_pokes['results'].map { |p| [p['name'].capitalize, p['url']] }.join(", ")
+  #   end
+  # end
+
+  # def index
+  #   pokes = []
+  #   all_pokes.each do |k, value|
+  #     if k == 'results'
+  #       value.each do |key, val|
+  #         response = Faraday.get(key["url"])
+  #         response = Oj.load(response.body)
+  #         pokes.push(response)
+  #       end
+  #     end
+  #   end
+
+  #   pokes.map do |poke| {
+  #     Poks.new
+  #       names: pokemon_info['forms'][0]['name'].capitalize
+
+  #     }
+  #   end
+
+  # pokes.map do |poke| {
+  # :abilities => :poke['abilities'].map { |p| p['ability']['name'].capitalize }.join(", "),
+  # :images => :poke['sprites']['other']['official-artwork']['front_default'],
+  # :names => :poke['forms'][0]['name'].capitalize,
+  # :ptypes => :poke['types'].map { |p| p['type']['name'].capitalize }.join(", "),
+  # :weights => :poke['weight']
+  #   }
+  # end
+
+  # @pokes = pokes
+
+  # render json: { pokemons:  @pokes }
+
+  # end
+
   def show
     # POKEMON_BASE --> BASIC INFO
     @poke = Pok.new(
-      ability: pokemon_info['abilities'].map { |p| p['ability']['name'].capitalize }.join(", "),
+      ability: pokemon_info['abilities'].map { |p| p['ability']['name'].capitalize }.join(', '),
       image: pokemon_info['sprites']['other']['official-artwork']['front_default'],
       name: pokemon_info['forms'][0]['name'].capitalize,
-      ptype: pokemon_info['types'].map { |p| p['type']['name'].capitalize }.join(", "),
+      ptype: pokemon_info['types'].map { |p| p['type']['name'].capitalize }.join(', '),
       weight: pokemon_info['weight']
     )
-    
-    # POKEMON_BASE2 --> DESCRIPTION
-    if pokemon_info2.present?
-      @poke1 = Pok.new(
-        description: pokemon_info2['descriptions'][1]['description']
-      )
-    else
-      @poke1 = Pok.new(
-        description: 'No hay descripción para este Pokemon' )
-    end
+
+    # POKEMON_BASE2 --> DESCRIPTION --> LANGUAJE SET ON [1]: SPANISH
+    @poke1 = if pokemon_info2.present?
+               Pok.new(
+                 description: pokemon_info2['descriptions'][1]['description']
+               )
+             else
+               Pok.new(
+                 description: 'No hay descripción para este Pokemon'
+               )
+             end
 
     # POKEMON_BASE3 --> EVOLUTION
-    if pokemon_info3.present? && pokemon_info3['types'].map { |p| p['type']['name'].capitalize }.join(", ") == pokemon_info['types'].map { |p| p['type']['name'].capitalize }.join(", ") 
-      @poke2 = Pok.new(
-        evolution: pokemon_info3['name'].capitalize
-      )
-    else
-      @poke2 = Pok.new(
-        evolution: 'Este Pokemon no tiene evolución' 
-      )
-    end
+    @poke2 = if pokemon_info3.present? && pokemon_info3['types'].map do |p|
+                  p['type']['name'].capitalize
+                end.join(', ') == pokemon_info['types'].map do |p|
+                                    p['type']['name'].capitalize
+                                  end.join(', ')
+               Pok.new(
+                 evolution: pokemon_info3['name'].capitalize
+               )
+             else
+               Pok.new(
+                 evolution: 'Este Pokemon no tiene evolución'
+               )
+             end
   end
 
   private
@@ -53,10 +101,10 @@ class PokemonsController < ApplicationController
     @allpokes ||= set_poke_client.pokemons
   end
 
-  # POKEMON_BASE --> BASIC INFO  
+  # POKEMON_BASE --> BASIC INFO
   def pokemon_info
     @pokemon1 ||= set_poke_client.pokemon_base(params[:id])
-  rescue
+  rescue StandardError
     render json: { mensaje: 'Este Pokemon no existe' }
   end
 

@@ -1,19 +1,20 @@
+# frozen_string_literal: true
+
 module PokeApi
   module V2
     class Client
-
       include HttpStatusCodes
       include ApiExceptions
 
-      API_ENDPOINT = 'https://pokeapi.co/api/v2'.freeze
-    
+      API_ENDPOINT = 'https://pokeapi.co/api/v2'
+
       def initialize; end
 
       # INDEX
       def pokemons
         request(
           http_method: :get,
-          endpoint: "pokemon?limit=2000"
+          endpoint: 'pokemon?limit=3'
         )
       end
 
@@ -31,7 +32,7 @@ module PokeApi
           http_method: :get,
           endpoint: "characteristic/#{id}"
         )
-        rescue => ex
+      rescue StandardError => e
       end
 
       # POKEMON_BASE3 --> EVOLUTION
@@ -40,7 +41,7 @@ module PokeApi
           http_method: :get,
           endpoint: "pokemon/#{id}"
         )
-        rescue => ex
+      rescue StandardError => e
       end
 
       private
@@ -73,6 +74,7 @@ module PokeApi
           UnauthorizedError
         when HTTP_FORBIDDEN_CODE
           return ApiRequestsQuotaReachedError if api_requests_quota_reached?
+
           ForbiddenError
         when HTTP_NOT_FOUND_CODE
           NotFoundError

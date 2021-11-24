@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiExceptions
   APIExceptionError = Class.new(StandardError)
   UnauthorizedError = Class.new(APIExceptionError)
