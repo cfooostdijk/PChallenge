@@ -6,14 +6,15 @@
 
   <body>
     <h1 style= "color: Red; text-align: center">Hola Entrenador, los Pokemones son:</h1>
-
+    <a href="<%= @next_page %>">Próximos Pokemones</a></p> <br>
+    <a href="<%= @previous_page %>">Pokemones Anteriores</a></p> <br>
     <% @pokes.each do |poke| %>
       <div>
         <h2 style= "font-size: 20px; margin-left: 100px; color: Blue"><%= poke.names %></h2>
         <a href="/pokemon/<%= poke.urls %>">
           <img src= <%= poke.images %> width="100" height="100" style="float:left; margin-left: 90px" >
         </a>
-
+        
         <p style= "margin-top: 50px; margin-left: 30%; color: Green"> 
           El pokemon es tipo: <%= poke.ptypes %> <br>
           El pokemon pesa: <%= poke.weights %> kgs <br>
@@ -24,5 +25,6 @@
       <hr>
 
     <% end %>
+
   </body>
 </html>

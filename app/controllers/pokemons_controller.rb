@@ -7,7 +7,9 @@ class PokemonsController < ApplicationController
   Poks = Struct.new(:abilities, :images, :names, :ptypes, :urls, :weights, keyword_init: true)
   Pok = Struct.new(:ability, :description, :evolution, :id, :image, :name, :ptype, :weight, keyword_init: true)
 
+  # POKEMONS
   def index
+
     pokes = []
     all_pokes.each do |k, value|
       if k == 'results'
@@ -18,6 +20,9 @@ class PokemonsController < ApplicationController
         end
       end
     end
+
+    @next_page = all_pokes['next']
+    @previous_page = all_pokes['previous']
 
     @pokes = []
     pokes.each do |poke|
@@ -31,6 +36,10 @@ class PokemonsController < ApplicationController
       ) 
       @pokes << @poke
     end
+ 
+
+
+
   end
 
   def show
@@ -77,7 +86,7 @@ class PokemonsController < ApplicationController
     @poke_client ||= PokeApi::V2::Client.new
   end
 
-  # V1
+  # POKEMONS
   def all_pokes
     @allpokes ||= set_poke_client.pokemons
   end
