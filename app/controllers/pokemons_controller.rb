@@ -36,10 +36,6 @@ class PokemonsController < ApplicationController
       ) 
       @pokes << @poke
     end
- 
-
-
-
   end
 
   def show
